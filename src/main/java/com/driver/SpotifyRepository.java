@@ -99,7 +99,7 @@ public class SpotifyRepository {
     public Playlist createPlaylistOnLength(String mobile, String title, int length) throws Exception {
 
         for(User user: users){
-            if(user.getName().equals(mobile)) {
+            if(user.getMobile().equals(mobile)) {
 
                 Playlist playlist = new Playlist(title);
                 playlists.add(playlist);
@@ -137,7 +137,7 @@ public class SpotifyRepository {
     public Playlist createPlaylistOnName(String mobile, String title, List<String> songTitles) throws Exception {
 
         for(User user: users){
-            if(user.getName().equals(mobile)) {
+            if(user.getMobile().equals(mobile)) {
 
                 Playlist playlist = new Playlist(title);
                 playlists.add(playlist);
@@ -184,7 +184,7 @@ public class SpotifyRepository {
         Playlist currPlaylist = null;
 
         for(User user: users) {
-            if(user.getName().equals(mobile)) {
+            if(user.getMobile().equals(mobile)) {
                 currUser = user;
                 break;
             }
@@ -205,7 +205,7 @@ public class SpotifyRepository {
 
         List<User> list = playlistListenerMap.get(currPlaylist);
         for(User user: list) {
-            if(user.getName().equals(mobile)) {
+            if(user.getMobile().equals(mobile)) {
                 return currPlaylist;
             }
         }
@@ -228,7 +228,7 @@ public class SpotifyRepository {
         User currUser = null;
         Song currSong = null;
         for(User user: users) {
-            if(user.getName().equals(mobile)){
+            if(user.getMobile().equals(mobile)){
                 currUser = user;
                 break;
             }
