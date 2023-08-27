@@ -143,12 +143,15 @@ public class SpotifyRepository {
                 playlists.add(playlist);
 
                 for(Song song : songs) {
-                    if(song.getTitle().equals(title)) {
-                        if(playlistSongMap.containsKey(playlist)){
-                            playlistSongMap.get(playlist).add(song);
-                        }else {
-                            playlistSongMap.put(playlist, new ArrayList<>());
-                            playlistSongMap.get(playlist).add(song);
+
+                    for(String songTitle: songTitles) {
+                        if(songTitle.equals(song.getTitle())){
+                            if(playlistSongMap.containsKey(playlist)){
+                                playlistSongMap.get(playlist).add(song);
+                            }else {
+                                playlistSongMap.put(playlist, new ArrayList<>());
+                                playlistSongMap.get(playlist).add(song);
+                            }
                         }
                     }
                 }
@@ -201,7 +204,7 @@ public class SpotifyRepository {
         if(currPlaylist == null) throw new Exception("Playlist does not exist");
 
         if(creatorPlaylistMap.containsKey(currUser) &&
-                creatorPlaylistMap.get(currPlaylist).getTitle().equals(playlistTitle)) return currPlaylist;
+                creatorPlaylistMap.get(currUser).getTitle().equals(playlistTitle)) return currPlaylist;
 
         List<User> list = playlistListenerMap.get(currPlaylist);
         for(User user: list) {
@@ -252,9 +255,8 @@ public class SpotifyRepository {
         }else{
 
             List<User> userLikingSong = songLikeMap.get(currSong);
-
             for(User user: userLikingSong) {
-                if(user.getName().equals(mobile)) {
+                if(user.getMobile().equals(mobile)) {
                     return currSong;
                 }
             }
