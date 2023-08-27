@@ -116,7 +116,10 @@ public class SpotifyRepository {
                 }
 
                 creatorPlaylistMap.put(user, playlist);
-                playlistListenerMap.put(playlist, new ArrayList<>());
+
+                if(!playlistListenerMap.containsKey(playlist)){
+                    playlistListenerMap.put(playlist, new ArrayList<>());
+                }
                 playlistListenerMap.get(playlist).add(user);
 
                 if(userPlaylistMap.containsKey(user)) {
@@ -181,7 +184,6 @@ public class SpotifyRepository {
         //If the user does not exist, throw "User does not exist" exception
         //If the playlist does not exists, throw "Playlist does not exist" exception
         // Return the playlist after updatingd
-
 
         User currUser = null;
         Playlist currPlaylist = null;
@@ -261,7 +263,7 @@ public class SpotifyRepository {
                 }
             }
 
-            userLikingSong.add(currUser);
+            songLikeMap.get(currSong).add(currUser);
             return currSong;
         }
     }
