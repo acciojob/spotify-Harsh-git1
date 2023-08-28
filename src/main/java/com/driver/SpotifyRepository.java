@@ -104,22 +104,17 @@ public class SpotifyRepository {
                 Playlist playlist = new Playlist(title);
                 playlists.add(playlist);
 
+                List<Song> songListEqualToLength = new ArrayList<>();
                 for(Song song : songs) {
                     if(song.getLength() == length) {
-                        if(playlistSongMap.containsKey(playlist)){
-                            playlistSongMap.get(playlist).add(song);
-                        }else {
-                            playlistSongMap.put(playlist, new ArrayList<>());
-                            playlistSongMap.get(playlist).add(song);
-                        }
+                       songListEqualToLength.add(song);
                     }
                 }
 
-                creatorPlaylistMap.put(user, playlist);
+                playlistSongMap.put(playlist, songListEqualToLength);
 
-                if(!playlistListenerMap.containsKey(playlist)){
-                    playlistListenerMap.put(playlist, new ArrayList<>());
-                }
+                creatorPlaylistMap.put(user, playlist);
+                playlistListenerMap.put(playlist, new ArrayList<>());
                 playlistListenerMap.get(playlist).add(user);
 
                 if(userPlaylistMap.containsKey(user)) {
@@ -205,19 +200,17 @@ public class SpotifyRepository {
 
         if(currPlaylist == null) throw new Exception("Playlist does not exist");
 
-        if(creatorPlaylistMap.containsKey(currUser) &&
-                creatorPlaylistMap.get(currUser).getTitle().equals(playlistTitle)) return currPlaylist;
 
         List<User> list = playlistListenerMap.get(currPlaylist);
-        for(User user: list) {
-            if(user.getMobile().equals(mobile)) {
+
+        for(User listener: list) {
+            if(listener.getMobile().equals(mobile)) {
                 return currPlaylist;
             }
         }
 
         playlistListenerMap.get(currPlaylist).add(currUser);
         userPlaylistMap.get(currUser).add(currPlaylist);
-
         return currPlaylist;
 
     }
