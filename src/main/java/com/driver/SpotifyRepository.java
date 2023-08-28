@@ -200,8 +200,10 @@ public class SpotifyRepository {
 
         if(currPlaylist == null) throw new Exception("Playlist does not exist");
 
+        List<User> list;
+        if(playlistListenerMap.containsKey(currPlaylist) ) list = playlistListenerMap.get(currPlaylist);
+        else throw new Exception("here happened null pointer exception");
 
-        List<User> list = playlistListenerMap.get(currPlaylist);
 
         for(User listener: list) {
             if(listener.getMobile().equals(mobile)) {
@@ -211,6 +213,7 @@ public class SpotifyRepository {
 
         playlistListenerMap.get(currPlaylist).add(currUser);
         userPlaylistMap.get(currUser).add(currPlaylist);
+
         return currPlaylist;
 
     }
