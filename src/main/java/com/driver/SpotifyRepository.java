@@ -232,12 +232,14 @@ public class SpotifyRepository {
 
         User currUser = null;
         Song currSong = null;
+
         for(User user: users) {
             if(user.getMobile().equals(mobile)){
                 currUser = user;
                 break;
             }
         }
+        //if user does not exist
         if(currUser == null) throw new Exception("User does not exist");
 
         for(Song song: songs) {
@@ -247,12 +249,37 @@ public class SpotifyRepository {
             }
         }
 
+        //if song does not exist
         if(currSong == null) throw new Exception("Song does not exist");
 
+
         if(!songLikeMap.containsKey(currSong)){
+            //if it is a first listener who like the song
             List<User> listOfUserLikeSong = new ArrayList<>();
             listOfUserLikeSong.add(currUser);
+
+            //update like of song
+            currSong.setLikes(1);
             songLikeMap.put(currSong, listOfUserLikeSong);
+
+            //update artist like
+            Artist artistOfCurrSong = null;
+            for(Artist artist : artistAlbumMap.keySet()){
+                List<Album> albums1 = artistAlbumMap.get(artist);
+                for(Album album: albums1) {
+                    List<Song> songs1 = albumSongMap.get(album);
+                    for(Song song: songs1) {
+                        if(song.getTitle().equals(songTitle)) {
+                            artistOfCurrSong = artist;
+                            break;
+                        }
+                    }
+                    if(artistOfCurrSong != null) break;
+                }
+                if(artistOfCurrSong != null) break;
+            }
+            if(artistOfCurrSong != null) artistOfCurrSong.setLikes(artistOfCurrSong.getLikes()+1);
+
             return currSong;
         }else{
 
@@ -264,6 +291,28 @@ public class SpotifyRepository {
             }
 
             songLikeMap.get(currSong).add(currUser);
+
+            //update like of song
+            currSong.setLikes(currSong.getLikes()+1);
+
+            //update artist like
+            Artist artistOfCurrSong = null;
+            for(Artist artist : artistAlbumMap.keySet()){
+                List<Album> albums1 = artistAlbumMap.get(artist);
+                for(Album album: albums1) {
+                    List<Song> songs1 = albumSongMap.get(album);
+                    for(Song song: songs1) {
+                        if(song.getTitle().equals(songTitle)) {
+                            artistOfCurrSong = artist;
+                            break;
+                        }
+                    }
+                    if(artistOfCurrSong != null) break;
+                }
+                if(artistOfCurrSong != null) break;
+            }
+            if(artistOfCurrSong != null) artistOfCurrSong.setLikes(artistOfCurrSong.getLikes()+1);
+
             return currSong;
         }
     }
@@ -272,20 +321,9 @@ public class SpotifyRepository {
 
         int noOfLikes = 0;
         String mostPopularArtist = "";
-
-        for(Artist artist : artistAlbumMap.keySet()){
-
-            List<Album> albums1 = artistAlbumMap.get(artist);
-            int currNoOfLikes = 0;
-            for(Album album: albums1) {
-
-                List<Song> songs1 = albumSongMap.get(album);
-                int likes = songLikeMap.get(songs1).size();
-                currNoOfLikes += likes;
-            }
-
-            if(currNoOfLikes > noOfLikes) {
-                noOfLikes = currNoOfLikes;
+        for(Artist artist : artists) {
+            if(artist.getLikes() > noOfLikes) {
+                noOfLikes = artist.getLikes();
                 mostPopularArtist = artist.getName();
             }
         }
@@ -295,13 +333,13 @@ public class SpotifyRepository {
 
     public String mostPopularSong() {
 
-        int noOfUser = 0;
+        int noOfLikes = 0;
         String mostPopularSong = "";
 
-        for(Song song: songLikeMap.keySet()) {
+        for(Song song: songs) {
 
-            if(noOfUser < songLikeMap.get(song).size()){
-                noOfUser = songLikeMap.get(song).size();
+            if(noOfLikes < song.getLikes()){
+                noOfLikes = song.getLikes();
                 mostPopularSong = song.getTitle();
             }
         }
