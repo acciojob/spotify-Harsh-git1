@@ -116,13 +116,13 @@ public class SpotifyRepository {
                 playlistListenerMap.put(playlist, new ArrayList<>());
                 playlistListenerMap.get(playlist).add(user);
 
-//                if(userPlaylistMap.containsKey(user)) {
-//                    userPlaylistMap.get(user).add(playlist);
-//                }else{
-//                    List<Playlist> playlistList = new ArrayList<>();
-//                    playlistList.add(playlist);
-//                    userPlaylistMap.put(user, playlistList);
-//                }
+                if(userPlaylistMap.containsKey(user)) {
+                    userPlaylistMap.get(user).add(playlist);
+                }else{
+                    List<Playlist> playlistList = new ArrayList<>();
+                    playlistList.add(playlist);
+                    userPlaylistMap.put(user, playlistList);
+                }
 
                 return playlist;
             }
